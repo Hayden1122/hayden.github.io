@@ -1,0 +1,59 @@
+// ==UserScript==
+// @name         随机数
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://xsl2880.com/game/?g=2
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=xsl2880.com
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // 将这里的数字替换成你要选取的号码总数
+    const totalNums = 10;
+
+    function getRandomNums(num) {
+        let nums = [];
+        while(nums.length < num) {
+            const randomNum = Math.floor(Math.random() * totalNums + 1);
+            if (!nums.includes(randomNum)) {
+                nums.push(randomNum);
+            }
+        }
+        return nums;
+    }
+
+    function selectRandomNums() {
+        const allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
+        for (let i = 0; i < allCheckBoxes.length; i++) {
+            allCheckBoxes[i].checked = false;
+        }
+        const randomNums = getRandomNums(6);
+        for (let i = 0; i < randomNums.length; i++) {
+            const checkboxId = 'cb' + randomNums[i];
+            document.getElementById(checkboxId).checked = true;
+        }
+    }
+
+    // 在页面上添加一个按钮来触发随机选号
+    const button = document.createElement('button');
+    button.innerHTML = '随机选号';
+    button.style.fontSize = '16px';
+    button.style.padding = '10px';
+    button.style.margin = '5px';
+    button.style.position = 'fixed';
+    button.style.top = '50%';
+    button.style.right = '20px';
+    button.style.transform = 'translateY(-50%)';
+    button.style.borderRadius = '5px';
+    button.style.backgroundColor = '#eee';
+    button.style.border = 'none';
+    button.style.cursor = 'pointer';
+    button.addEventListener('click', () => {
+        selectRandomNums();
+    });
+    document.body.appendChild(button);
+})();
